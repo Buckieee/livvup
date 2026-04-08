@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LIVVUP — Live Above the Ordinary | Health. Reimagined.</title>
+<meta name="description" content="LivvUp by Unilever — premium health supplements. Find your perfect supplement with our interactive quiz.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0A0A0A;--lime:#C8F064;--accent:#a371f7;--card:#141414;--muted:#888;--white:#fff;--font-head:'Space Grotesk',sans-serif;--font-body:'Inter',sans-serif}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);background-image:radial-gradient(circle at 15% 50%, rgba(200, 240, 100, 0.06) 0%, transparent 40%),radial-gradient(circle at 85% 30%, rgba(163, 113, 247, 0.08) 0%, transparent 40%);background-attachment:fixed;color:var(--white);font-family:var(--font-body);overflow-x:hidden;cursor:none}
+a{color:inherit;text-decoration:none}
+/* CURSOR */
+.cursor{width:20px;height:20px;background:var(--lime);border-radius:50%;position:fixed;pointer-events:none;z-index:99999;mix-blend-mode:difference;transition:transform .15s}
+.cursor.hover{transform:scale(2.5)}
+/* LOADER */
+.loader{position:fixed;inset:0;background:var(--bg);z-index:100000;display:flex;align-items:center;justify-content:center;transition:opacity .8s cubic-bezier(.65,0,.35,1)}
+.loader.done{opacity:0;pointer-events:none}
+.loader span{font-family:var(--font-head);font-size:1.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--lime);animation:pulse 1s ease infinite alternate}
+@keyframes pulse{from{opacity:.3}to{opacity:1}}
+/* NAV */
+nav{position:fixed;top:0;left:0;width:100%;z-index:1000;padding:1.5rem 3rem;display:flex;align-items:center;justify-content:space-between;transition:background .4s,backdrop-filter .4s}
+nav.scrolled{background:rgba(10,10,10,.95);backdrop-filter:blur(20px)}
+.nav-logo{font-family:var(--font-head);font-weight:700;font-size:1.3rem;letter-spacing:.2em;text-transform:uppercase}
+.nav-logo .arr{color:var(--lime)}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-family:var(--font-head);font-size:.85rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);transition:color .3s;position:relative}
+.nav-links a:hover,.nav-links a.active{color:var(--white)}
+.nav-links a.active::before{content:'';position:absolute;left:-14px;top:50%;transform:translateY(-50%);width:6px;height:6px;background:var(--lime);border-radius:50%}
+.menu-btn{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:none;padding:5px}
+.menu-btn span{width:24px;height:2px;background:#fff;transition:.3s}
+/* HERO */
+.hero{position:relative;width:100%;height:100vh;min-height:700px;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1605646197116-2911b3fe942e?w=1600') center/cover no-repeat;will-change:transform}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,.75) 0%,rgba(10,10,10,.5) 40%,rgba(10,10,10,.9) 100%)}
+.hero-content{position:relative;z-index:2;padding:0 3rem;max-width:1400px;margin:0 auto;width:100%}
+.hero-line{font-family:var(--font-head);font-weight:700;font-size:clamp(3.5rem,10vw,9rem);line-height:1.05;letter-spacing:-.02em;text-transform:uppercase;opacity:0;transform:translateY(80px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.hero-line.vis{opacity:1;transform:translateY(0)}
+.hero-line:nth-child(1){transition-delay:.1s}
+.hero-line:nth-child(2){transition-delay:.25s}
+.hero-line:nth-child(3){transition-delay:.4s}
+.lime{color:var(--lime)}
+.hero-sub{font-size:clamp(1rem,1.8vw,1.25rem);font-weight:300;color:var(--muted);max-width:500px;line-height:1.7;margin-bottom:2.5rem;opacity:0;transform:translateY(30px);transition:opacity .8s ease .6s,transform .8s ease .6s}
+.hero-sub.vis{opacity:1;transform:translateY(0)}
+.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;transform:translateY(30px);transition:opacity .8s ease .75s,transform .8s ease .75s}
+.hero-ctas.vis{opacity:1;transform:translateY(0)}
+.btn-lime{display:inline-flex;align-items:center;gap:.5rem;padding:1rem 2.2rem;background:var(--lime);color:var(--bg);font-family:var(--font-head);font-weight:600;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;border:none;cursor:none;transition:background .3s,transform .3s}
+.btn-lime:hover{background:#deff8e;transform:translateY(-2px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:.5rem;padding:1rem 2.2rem;background:transparent;color:#fff;font-family:var(--font-head);font-weight:500;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(255,255,255,.25);cursor:none;transition:.3s}
+.btn-ghost:hover{border-color:var(--lime);background:rgba(200,240,100,.05)}
+/* Global Floaters */
+.global-floaters{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.g-float{position:absolute;will-change:transform;opacity:0.2;transition:opacity 0.3s;filter:drop-shadow(0 15px 30px rgba(0,0,0,0.5))}
+.g-pill{width:60px;height:24px;border-radius:12px;background:var(--lime)}
+.g-pill.accent{background:var(--accent)}
+.g-pill.white{background:var(--white)}
+.g-pill.ghost{background:transparent;border:1.5px solid var(--lime)}
+.g-pill.ghost-white{background:transparent;border:1.5px solid rgba(255,255,255,.3)}
+.g-dot{width:8px;height:8px;border-radius:50%;background:var(--lime)}
+.g-dot.accent{background:var(--accent)}
+.g-orb{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,var(--lime),transparent 70%);opacity:.03;filter:blur(20px)}
+.g-orb.accent{background:radial-gradient(circle,var(--accent),transparent 70%)}
+.hero-content{position:relative;z-index:2;padding:0 3rem;max-width:1400px;margin:0 auto;width:100%}
+.rotating-text{position:absolute;bottom:3rem;left:3rem;width:120px;height:120px;z-index:2}
+.rotating-text svg{width:100%;height:100%;animation:rot 12s linear infinite}
+.rotating-text svg text{font-family:var(--font-head);font-size:11px;letter-spacing:3px;text-transform:uppercase;fill:var(--lime)}
+@keyframes rot{to{transform:rotate(360deg)}}
+.scroll-ind{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:.5rem}
+.scroll-ind span{font-family:var(--font-head);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.scroll-ind .arr{width:20px;height:20px;border-right:1.5px solid var(--lime);border-bottom:1.5px solid var(--lime);transform:rotate(45deg);animation:bounce 2s ease infinite}
+@keyframes bounce{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(8px)}}
+/* MARQUEE */
+.marquee{width:100%;overflow:hidden;border-top:1px solid rgba(200,240,100,.1);border-bottom:1px solid rgba(200,240,100,.1);padding:1.2rem 0}
+.marquee-track{display:flex;width:max-content;animation:scroll 25s linear infinite}
+.marquee-text{font-family:var(--font-head);font-size:clamp(.85rem,1.5vw,1.1rem);font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--lime);white-space:nowrap;padding-right:3rem}
+@keyframes scroll{to{transform:translateX(-50%)}}
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+.reveal.vis{opacity:1;transform:translateY(0)}
+/* SECTION COMMON */
+.section-label{font-family:var(--font-head);font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;color:var(--lime);margin-bottom:1.5rem;display:block}
+/* ========== QUIZ SECTION ========== */
+.quiz-section{padding:6rem 3rem 8rem;position:relative;overflow:hidden}
+.quiz-section::before{content:'';position:absolute;top:-200px;left:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(200,240,100,.06) 0%,transparent 70%);pointer-events:none}
+.quiz-section::after{content:'';position:absolute;bottom:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(200,240,100,.04) 0%,transparent 70%);pointer-events:none}
+.quiz-inner{max-width:1100px;margin:0 auto;text-align:center;position:relative;z-index:1}
+.quiz-inner h2{font-family:var(--font-head);font-weight:700;font-size:clamp(2rem,5vw,3.5rem);letter-spacing:.02em;margin-bottom:.5rem}
+.quiz-inner .quiz-subtitle{font-size:1.1rem;color:var(--muted);margin-bottom:3.5rem;line-height:1.6}
+/* Quiz Steps */
+.quiz-step{display:none}
+.quiz-step.active{display:block;animation:fadeUp .5s ease forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.goal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:900px;margin:0 auto}
+.goal-card{background:var(--card);border:1px solid rgba(255,255,255,.06);padding:2rem 1.5rem;cursor:none;transition:all .35s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden;text-align:center}
+.goal-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(200,240,100,.05),transparent);opacity:0;transition:opacity .3s}
+.goal-card:hover{border-color:var(--lime);transform:translateY(-4px)}
+.goal-card:hover::before{opacity:1}
+.goal-card .goal-icon{font-family:var(--font-head);font-size:2.5rem;font-weight:700;color:rgba(200,240,100,0.15);margin-bottom:.5rem;display:block;transition:color .3s}
+.goal-card:hover .goal-icon{color:var(--lime)}
+.goal-card h3{font-family:var(--font-head);font-weight:600;font-size:1.1rem;letter-spacing:.02em;margin-bottom:.5rem}
+.goal-card p{font-size:.85rem;color:var(--muted);line-height:1.5}
+/* Quiz Result */
+.quiz-result{max-width:800px;margin:0 auto}
+.result-card{background:var(--card);border:1px solid rgba(200,240,100,.15);overflow:hidden;animation:scaleIn .6s cubic-bezier(.16,1,.3,1)}
+@keyframes scaleIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.result-card-inner{display:grid;grid-template-columns:1fr 1fr;min-height:400px}
+.result-img{position:relative;overflow:hidden}
+.result-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.85)}
+.result-img .result-badge{position:absolute;top:1.5rem;left:1.5rem;background:var(--lime);color:var(--bg);font-family:var(--font-head);font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;padding:.5rem 1rem}
+.result-body{padding:2.5rem;display:flex;flex-direction:column;justify-content:center;text-align:left}
+.result-body .product-tag{font-family:var(--font-head);font-size:.7rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--lime);margin-bottom:.8rem}
+.result-body h3{font-family:var(--font-head);font-weight:700;font-size:1.8rem;margin-bottom:.8rem}
+.result-body p{font-size:.95rem;color:var(--muted);line-height:1.7;margin-bottom:.6rem}
+.result-body .ingredients{font-size:.8rem;color:rgba(255,255,255,.4);margin-bottom:1.5rem}
+.result-actions{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1rem}
+.btn-sm{padding:.8rem 1.5rem;font-size:.8rem}
+.try-again{font-family:var(--font-head);font-size:.8rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;background:none;border:none;cursor:none;transition:color .3s;margin-top:1.5rem;display:block;margin-left:auto;margin-right:auto}
+.try-again:hover{color:var(--lime)}
+
+/* Multi-Step Quiz Specifics */
+.quiz-progress-bar{width:100%;height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin-bottom:.8rem;position:relative;overflow:hidden}
+.quiz-progress-fill{position:absolute;left:0;top:0;height:100%;background:var(--lime);transition:width .4s cubic-bezier(.16,1,.3,1)}
+.quiz-progress-text{font-family:var(--font-body);font-size:.85rem;color:var(--muted);margin-bottom:2rem;display:block;text-align:left}
+.quiz-step-q{text-align:left}
+.quiz-step-q h3{font-family:var(--font-body);font-weight:700;font-size:clamp(1.5rem,3vw,2.2rem);margin-bottom:2rem;color:var(--white);letter-spacing:-.02em}
+.quiz-options{display:flex;flex-direction:column;gap:1rem}
+.quiz-opt-btn{background:transparent;border:2px solid rgba(255,255,255,.15);border-radius:10px;padding:1.2rem 1.5rem;text-align:left;font-family:var(--font-body);font-weight:600;font-size:1.1rem;color:var(--white);cursor:none;transition:all .3s}
+.quiz-opt-btn:hover{border-color:var(--white);background:rgba(255,255,255,.05);transform:translateX(5px)}
+.animate-in{animation:fadeInRight .4s ease forwards}
+@keyframes fadeInRight{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+/* ========== PRODUCTS ========== */
+.products{padding:8rem 3rem}
+.products-inner{max-width:1400px;margin:0 auto}
+.products .section-header{text-align:center;margin-bottom:4rem}
+.products .section-header h2{font-family:var(--font-head);font-weight:700;font-size:clamp(2.5rem,5vw,4.5rem);letter-spacing:.05em;text-transform:uppercase;margin-bottom:1.5rem}
+.products .section-header p{font-size:1.1rem;color:var(--muted);max-width:500px;margin:0 auto;line-height:1.7}
+/* Product showcase - large alternating layout */
+.product-showcase{display:flex;flex-direction:column;gap:2rem}
+.product-row{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:350px;background:var(--card);border:1px solid rgba(255,255,255,.04);overflow:hidden;transition:border-color .4s}
+.product-row:hover{border-color:rgba(200,240,100,.3)}
+.product-row:nth-child(even){direction:rtl}
+.product-row:nth-child(even)>*{direction:ltr}
+.product-row-img{overflow:hidden;position:relative}
+.product-row-img img{width:100%;height:100%;object-fit:cover;transition:transform .6s;filter:brightness(.8) saturate(.9)}
+.product-row:hover .product-row-img img{transform:scale(1.06);filter:brightness(.9) saturate(1)}
+.product-row-body{padding:3rem;display:flex;flex-direction:column;justify-content:center}
+.product-row-body .product-tag{font-family:var(--font-head);font-size:.7rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--lime);margin-bottom:.8rem}
+.product-row-body h3{font-family:var(--font-head);font-weight:600;font-size:1.6rem;letter-spacing:.02em;margin-bottom:.8rem}
+.product-row-body p{font-size:.95rem;color:var(--muted);line-height:1.7;margin-bottom:1.5rem}
+.product-row-body .add-link{font-family:var(--font-head);font-size:.82rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#fff;transition:color .3s}
+.product-row-body .add-link:hover{color:var(--lime)}
+/* Product lineup image */
+.product-lineup{margin-top:3rem;text-align:center}
+.product-lineup img{max-width:100%;height:auto;filter:brightness(.95)}
+/* ========== ABOUT ========== */
+.about{padding:8rem 3rem;max-width:1400px;margin:0 auto}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.about-left h2{font-family:var(--font-head);font-weight:700;font-size:clamp(2rem,4vw,3.2rem);line-height:1.15;margin-bottom:2rem}
+.about-left p{font-size:1rem;line-height:1.8;color:var(--muted);margin-bottom:1.5rem;max-width:500px}
+.about-left .footnote{font-size:.8rem;color:#555;font-style:italic}
+.stats-row{display:flex;gap:3rem;margin:2.5rem 0 2rem}
+.stat-number{font-family:var(--font-head);font-weight:700;font-size:clamp(2rem,4vw,3rem);color:var(--lime);display:block;line-height:1}
+.stat-label{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:.5rem;display:block}
+.about-right{position:relative}
+.about-right img{width:100%;height:550px;object-fit:cover;filter:brightness(.85) contrast(1.05)}
+.about-right::after{content:'';position:absolute;top:-15px;right:-15px;width:100%;height:100%;border:1px solid rgba(200,240,100,.15);z-index:-1}
+.coming-soon-badge{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--lime);color:var(--bg);font-family:var(--font-head);font-size:1.2rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:1rem 2.5rem;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.6);z-index:10;pointer-events:none}
+/* ========== COMMUNITY ========== */
+.community{padding:8rem 3rem;background:#0e0e0e}
+.community-inner{max-width:1400px;margin:0 auto}
+.community .section-header{text-align:center;margin-bottom:4rem}
+.community .section-header h2{font-family:var(--font-head);font-weight:700;font-size:clamp(2rem,4vw,3.2rem)}
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:4rem}
+.test-card{background:var(--card);border:1px solid rgba(255,255,255,.05);padding:2.5rem 2rem}
+.test-card .qm{font-family:var(--font-head);font-size:3rem;color:var(--lime);line-height:1;margin-bottom:1rem}
+.test-card blockquote{font-style:italic;font-size:1rem;line-height:1.7;color:#ccc;margin-bottom:1.5rem}
+.test-card .author{font-family:var(--font-head);font-size:.85rem;font-weight:600;margin-bottom:.3rem}
+.test-card .atag{font-size:.75rem;color:var(--lime);letter-spacing:.1em;text-transform:uppercase}
+.community-stat{text-align:center;margin-bottom:2.5rem}
+.community-cta{text-align:center}
+/* ========== FOOTER ========== */
+footer{position:relative;padding:5rem 3rem 2rem;background:var(--bg)}
+footer::before{content:'';position:absolute;top:0;left:3rem;right:3rem;height:1px;background:var(--lime)}
+.footer-inner{max-width:1400px;margin:0 auto}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:4rem}
+.footer-brand .flogo{font-family:var(--font-head);font-weight:700;font-size:1.8rem;letter-spacing:.15em;text-transform:uppercase;display:block;margin-bottom:1rem}
+.footer-brand p{font-size:.9rem;color:var(--muted);line-height:1.7;max-width:300px}
+.footer-col h4{font-family:var(--font-head);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:1.5rem}
+.footer-col a{display:block;font-size:.88rem;color:var(--muted);margin-bottom:.8rem;transition:color .3s}
+.footer-col a:hover{color:var(--lime)}
+.footer-social{display:flex;gap:1rem;margin-top:.5rem}
+.footer-social a{font-family:var(--font-head);font-weight:600;font-size:.8rem;letter-spacing:.1em;margin-bottom:0}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.05);padding-top:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-bottom p{font-size:.78rem;color:#555}
+.footer-bottom .credit{font-style:italic;color:#444}
+/* ========== RESPONSIVE ========== */
+@media(max-width:1024px){.goal-grid{grid-template-columns:repeat(2,1fr)}.footer-top{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){
+nav{padding:1.2rem 1.5rem}
+.nav-links{display:none;position:fixed;inset:0;background:rgba(10,10,10,.98);flex-direction:column;align-items:center;justify-content:center;gap:2rem;z-index:999}
+.nav-links.open{display:flex}
+.nav-links a{font-size:1.2rem;color:#fff}
+.menu-btn{display:flex;z-index:1001}
+.hero-content{padding:0 1.5rem}
+.rotating-text{display:none}
+.quiz-section{padding:4rem 1.5rem}
+.goal-grid{grid-template-columns:1fr 1fr}
+.result-card-inner{grid-template-columns:1fr}
+.result-img{height:250px}
+.products{padding:4rem 1.5rem}
+.product-row{grid-template-columns:1fr}
+.product-row:nth-child(even){direction:ltr}
+.product-row-img{height:250px}
+.about{padding:4rem 1.5rem}
+.about-grid{grid-template-columns:1fr;gap:2.5rem}
+.about-right img{height:350px}
+.stats-row{gap:1.5rem}
+.community{padding:4rem 1.5rem}
+.test-grid{grid-template-columns:1fr}
+footer{padding:4rem 1.5rem 2rem}
+footer::before{left:1.5rem;right:1.5rem}
+.footer-top{grid-template-columns:1fr;gap:2rem}
+.footer-bottom{flex-direction:column;text-align:center}
+.cursor{display:none}
+body{cursor:auto}
+.btn-lime,.btn-ghost,.goal-card,.product-row,.try-again,a,button{cursor:pointer}
+}
+@media(max-width:480px){.hero-line{font-size:clamp(2.8rem,12vw,4rem)}.stats-row{flex-direction:column}.goal-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="loader" id="loader"><span>LIVV↑UP</span></div>
+<div class="cursor" id="cur"></div>
+
+<div class="global-floaters" id="gFloaters">
+  <!-- Orbs for ambient lighting interaction -->
+  <div class="g-float g-orb" data-speed="0.5" style="top: 20%; left: 10%;"></div>
+  <div class="g-float g-orb accent" data-speed="-0.3" style="top: 60%; right: 15%;"></div>
+  
+  <!-- Solid Pills -->
+  <div class="g-float g-pill" data-speed="1.2" style="top: 15%; left: 8%;"></div>
+  <div class="g-float g-pill accent" data-speed="-0.8" style="top: 45%; right: 12%; width:44px; height:18px"></div>
+  <div class="g-float g-pill white" data-speed="1.6" style="top: 75%; left: 18%; width:35px; height:14px"></div>
+  <div class="g-float g-pill" data-speed="-1.2" style="top: 85%; right: 25%; width:50px; height:20px"></div>
+  <div class="g-float g-pill accent" data-speed="2.2" style="top: 8%; left: 45%; width:30px; height:12px"></div>
+
+  <!-- Ghost outline pills -->
+  <div class="g-float g-pill ghost" data-speed="-1.5" style="top: 12%; right: 25%; width:48px; height:20px"></div>
+  <div class="g-float g-pill ghost-white" data-speed="1.1" style="top: 55%; left: 22%; width:55px; height:22px"></div>
+  <div class="g-float g-pill ghost" data-speed="-1.8" style="top: 35%; right: 35%; width:40px; height:16px"></div>
+  <div class="g-float g-pill ghost-white" data-speed="1.4" style="top: 90%; left: 40%; width:30px; height:12px"></div>
+
+  <!-- Scattered dots -->
+  <div class="g-float g-dot" data-speed="1.5" style="top: 25%; left: 25%;"></div>
+  <div class="g-float g-dot accent" data-speed="-1.2" style="top: 65%; left: 8%;"></div>
+  <div class="g-float g-dot" data-speed="2.5" style="top: 80%; right: 15%;"></div>
+  <div class="g-float g-dot accent" data-speed="-2.0" style="top: 18%; right: 45%;"></div>
+  <div class="g-float g-dot" data-speed="1.3" style="top: 50%; right: 20%;"></div>
+</div>
+
+<nav id="nav">
+  <a href="#" class="nav-logo">LIVV<span class="arr">↑</span>UP</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#quiz" class="active">Find Yours</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#community">Community</a></li>
+  </ul>
+  <button class="menu-btn" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-line" id="hl1"><span class="lime">LIVE</span></div>
+    <div class="hero-line" id="hl2">ABOVE THE</div>
+    <div class="hero-line" id="hl3">ORDINARY<span class="lime">↑</span></div>
+    <p class="hero-sub" id="hsub">Powered by precision-fermented yeast. Find the bio-identical supplement that actually matches your goals — in 10 seconds.</p>
+    <div class="hero-ctas" id="hcta">
+      <a href="#quiz" class="btn-lime">Find Your Supplement →</a>
+      <a href="#products" class="btn-ghost">Browse All</a>
+    </div>
+  </div>
+  <div class="rotating-text">
+    <svg viewBox="0 0 200 200"><defs><path id="cp" d="M100,100 m-75,0 a75,75 0 1,1 150,0 a75,75 0 1,1 -150,0" fill="none"/></defs><text><textPath href="#cp">LIVVUP × UNILEVER × WELLNESS × LIVVUP × UNILEVER × WELLNESS ×</textPath></text></svg>
+  </div>
+  <div class="scroll-ind"><span>Scroll</span><div class="arr"></div></div>
+</section>
+
+<div class="marquee">
+  <div class="marquee-track">
+    <span class="marquee-text">BUILD MUSCLE · BOOST ENERGY · GLOW SKIN · DAILY DIGESTION · REDUCE STRESS · SLEEP BETTER · </span>
+    <span class="marquee-text">BUILD MUSCLE · BOOST ENERGY · GLOW SKIN · DAILY DIGESTION · REDUCE STRESS · SLEEP BETTER · </span>
+    <span class="marquee-text">BUILD MUSCLE · BOOST ENERGY · GLOW SKIN · DAILY DIGESTION · REDUCE STRESS · SLEEP BETTER · </span>
+    <span class="marquee-text">BUILD MUSCLE · BOOST ENERGY · GLOW SKIN · DAILY DIGESTION · REDUCE STRESS · SLEEP BETTER · </span>
+  </div>
+</div>
+
+<!-- INTERACTIVE QUIZ -->
+<section class="quiz-section" id="quiz">
+  <div class="quiz-inner reveal">
+    <span class="section-label">Personalised For You</span>
+    <h2>Find your <span class="lime">perfect</span> supplement</h2>
+    <p class="quiz-subtitle">Answer one question. We'll match you with the right product. No BS, no overwhelm.</p>
+
+    <div class="quiz-step active" id="quizStep1" style="max-width:650px;margin:1rem auto 0;">
+      <!-- JS injected steps -->
+    </div>
+
+    <div class="quiz-step" id="quizStep2">
+      <div class="quiz-result" id="quizResult"></div>
+      <button class="try-again" onclick="resetQuiz()">← Try another goal</button>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS SHOWCASE -->
+<section class="products" id="products">
+  <div class="products-inner">
+    <div class="section-header reveal">
+      <span class="section-label">The Collection</span>
+      <h2>BUILD YOUR RITUAL</h2>
+      <p>We don't sell products. We sell outcomes. Six supplements, six transformations.</p>
+    </div>
+    <div class="product-showcase">
+      <div class="product-row reveal">
+        <div class="product-row-img"><img src="images/matcha_drink.png" alt="LivvUp Matcha Energy Drink" loading="lazy"></div>
+        <div class="product-row-body">
+          <span class="product-tag">ENERGY + FOCUS</span>
+          <h3>MATCHA VITALITY</h3>
+          <p>Ready-to-drink sparkling matcha with L-Theanine and Lion's Mane. Clean, sustained energy without the caffeine crash. Your 3pm slump solution.</p>
+          <a href="#" class="add-link">→ Add to Ritual</a>
+        </div>
+      </div>
+      <div class="product-row reveal">
+        <div class="product-row-img"><img src="images/berry_drink.png" alt="LivvUp Berry Antioxidant Drink" loading="lazy"></div>
+        <div class="product-row-body">
+          <span class="product-tag">RECOVERY + GLOW</span>
+          <h3>BERRY ANTIOXIDANT</h3>
+          <p>Sparkling mixed berry elixir loaded with Vitamin C, Acerola cherry, and marine collagen peptides. Recovery that tastes like dessert.</p>
+          <a href="#" class="add-link">→ Add to Ritual</a>
+        </div>
+      </div>
+      <div class="product-row reveal">
+        <div class="product-row-img"><img src="images/citrus_drink.png" alt="LivvUp Citrus Immunity Drink" loading="lazy"></div>
+        <div class="product-row-body">
+          <span class="product-tag">IMMUNITY + HYDRATION</span>
+          <h3>CITRUS DEFENCE</h3>
+          <p>Crisp yuzu and lemon sparkling water infused with Zinc, Echinacea, and daily electrolytes. Hydration that works harder.</p>
+          <a href="#" class="add-link">→ Add to Ritual</a>
+        </div>
+      </div>
+      <div class="product-row reveal">
+        <div class="product-row-img"><img src="images/matcha_bar.png" alt="LivvUp Matcha Almond Protein Bar" loading="lazy"></div>
+        <div class="product-row-body">
+          <span class="product-tag">PLANT PROTEIN</span>
+          <h3>MATCHA ALMOND BAR</h3>
+          <p>15g of clean plant protein wrapped in a decadent matcha almond coating. No chalky texture. No artificial sweeteners. Just real fuel.</p>
+          <a href="#" class="add-link">→ Add to Ritual</a>
+        </div>
+      </div>
+      <div class="product-row reveal">
+        <div class="product-row-img"><img src="images/berry_bar.png" alt="LivvUp Dark Chocolate Berry Bar" loading="lazy"></div>
+        <div class="product-row-body">
+          <span class="product-tag">PLANT PROTEIN</span>
+          <h3>DARK CHOC BERRY BAR</h3>
+          <p>Rich dark chocolate and tart dried berries over a soft fermented-yeast protein core. The indulgence you want with the macros you need.</p>
+          <a href="#" class="add-link">→ Add to Ritual</a>
+        </div>
+      </div>
+      <div class="product-row reveal">
+        <div class="product-row-img"><img src="images/chips.png" alt="LivvUp Protein Chips" loading="lazy"></div>
+        <div class="product-row-body">
+          <span class="product-tag">HIGH PROTEIN SNACK</span>
+          <h3>PROTEIN CHIPS</h3>
+          <p>20g of precision-fermented yeast protein in every bag. Crispy, tangy, and dangerously good. Say goodbye to heavy, bloating whey snacks.</p>
+          <a href="#" class="add-link">→ Add to Ritual</a>
+        </div>
+      </div>
+    </div>
+    <div class="product-lineup reveal" style="margin-top:4rem">
+      <img src="images/drinks.png" alt="LivvUp Drinks and Bars Lineup">
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="about-left reveal">
+      <span class="section-label">Our Philosophy</span>
+      <h2>Health as a lifestyle,<br>not a prescription.</h2>
+      <div class="stats-row">
+        <div class="stat"><span class="stat-number" data-target="4" data-suffix="M+">0</span><span class="stat-label">Customers</span></div>
+        <div class="stat"><span class="stat-number" data-target="12" data-suffix="">0</span><span class="stat-label">Product lines</span></div>
+        <div class="stat"><span class="stat-number" data-target="100" data-suffix="%">0</span><span class="stat-label">Natural actives</span></div>
+      </div>
+      <p>LivvUp was born from a breakthrough in bio-technology. Backed by Unilever's decades of consumer science, every single LivvUp product is powered by our proprietary <strong>precision-fermented yeast</strong>.</p>
+      <p>This means cleaner, highly bio-available nutrients that your body actually absorbs, without the bloating or digestive stress associated with common supplements like whey.</p>
+      <p>No synthetic fillers. No false claims. Just next-generation biology that works.</p>
+      <p class="footnote">Insight drawn from Unilever's 2024 Future of Wellbeing report.</p>
+    </div>
+    <div class="about-right reveal">
+      <div style="position:absolute;inset:0;background:rgba(0,0,0,0.3);z-index:5;"></div>
+      <img src="images/livvup_wellness.png" alt="LivvUp supplements flat lay" loading="lazy">
+      <div class="coming-soon-badge">COMING SOON</div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<section class="community" id="community">
+  <div class="community-inner">
+    <div class="section-header reveal">
+      <span class="section-label">Community</span>
+      <h2>Real people. Real results.</h2>
+    </div>
+    <div class="test-grid">
+      <div class="test-card reveal">
+        <span class="qm">"</span>
+        <blockquote>3 months in. My energy and my skin both transformed. I didn't expect a supplement to change how I feel about mornings.</blockquote>
+        <div class="author">Priya R.</div><div class="atag">GLOW + ENERGY</div>
+      </div>
+      <div class="test-card reveal">
+        <span class="qm">"</span>
+        <blockquote>I've tried every adaptogen brand. Balance Drops is the first one where I genuinely feel the difference within a week.</blockquote>
+        <div class="author">Marcus T.</div><div class="atag">CALM + BALANCE</div>
+      </div>
+      <div class="test-card reveal">
+        <span class="qm">"</span>
+        <blockquote>The Fuel Greens blend replaced my coffee. I never thought I'd say that. Clean energy is real and it's life-changing.</blockquote>
+        <div class="author">Sofia L.</div><div class="atag">ENERGY + GUT</div>
+      </div>
+    </div>
+    <div class="community-stat reveal">
+      <span class="stat-number" data-target="1200" data-suffix="+">0</span>
+      <p style="color:var(--muted);margin-top:.3rem">people started their ritual this week</p>
+    </div>
+    <div class="community-cta reveal"><a href="#" class="btn-lime">Join the Community →</a></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="flogo">LIVV<span class="lime">↑</span>UP</span>
+        <p>Health. Reimagined. Personalised. Yours. A premium wellbeing line by Unilever.</p>
+      </div>
+      <div class="footer-col"><h4>Products</h4><a href="#">Matcha Vitality</a><a href="#">Berry Antioxidant</a><a href="#">Citrus Defence</a><a href="#">Matcha Almond Bar</a><a href="#">Dark Choc Berry Bar</a><a href="#">Protein Chips</a></div>
+      <div class="footer-col"><h4>Learn</h4><a href="#">The Science</a><a href="#">Ingredients</a><a href="#">Ritual Guide</a><a href="#">Our Story</a><a href="#">Sustainability</a></div>
+      <div class="footer-col"><h4>Connect</h4><a href="#">Contact</a><a href="#">FAQ</a><a href="#">Careers</a><div class="footer-social"><a href="#">TW</a><a href="#">IG</a><a href="#">TK</a></div></div>
+    </div>
+    <div class="footer-bottom">
+      <p>© LivvUp by Unilever 2024</p>
+      <p class="credit">A concept for MSc Strategic Marketing · Imperial College Business School</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// LOADER
+window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('loader').classList.add('done');['hl1','hl2','hl3','hsub','hcta'].forEach(id=>document.getElementById(id).classList.add('vis'))},600)});
+
+// CURSOR AND PARALLAX
+const cur=document.getElementById('cur');let mx=0,my=0,cx=0,cy=0;
+const floaters=document.querySelectorAll('.g-float');
+let time=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+(function ac(){
+  cx+=(mx-cx)*.15;cy+=(my-cy)*.15;
+  cur.style.transform=`translate(${cx-10}px,${cy-10}px)`;
+  
+  time+=0.01;
+  const cX=(mx/window.innerWidth-0.5)*2;
+  const cY=(my/window.innerHeight-0.5)*2;
+
+  floaters.forEach((f, i) => {
+    const sp=parseFloat(f.getAttribute('data-speed'));
+    const floatY=Math.sin(time+i)*15;
+    const rot=Math.cos(time+i)*5;
+    const pX=-cX*15*sp;
+    const pY=-cY*15*sp;
+    
+    // Slight repulsion
+    const rect = f.getBoundingClientRect();
+    const fX = rect.left + rect.width/2;
+    const fY = rect.top + rect.height/2;
+    const dist = Math.sqrt(Math.pow(mx-fX, 2) + Math.pow(my-fY, 2));
+    
+    let repX=0, repY=0;
+    if(dist < 200) {
+      const force = (200 - dist) / 5;
+      const angle = Math.atan2(fY - my, fX - mx);
+      repX = Math.cos(angle) * force;
+      repY = Math.sin(angle) * force;
+      f.style.opacity = "0.5";
+    } else {
+      f.style.opacity = "0.2";
+    }
+
+    f.style.transform=`translate3d(${pX+repX}px, ${floatY+pY+repY}px, 0) rotate(${rot + (pX*0.5)}deg)`;
+  });
+
+  requestAnimationFrame(ac);
+})();
+document.querySelectorAll('a,button,.goal-card,.product-row').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('hover'));el.addEventListener('mouseleave',()=>cur.classList.remove('hover'))});
+
+// NAV
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>80)});
+document.getElementById('menuBtn').addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));
+document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>document.getElementById('navLinks').classList.remove('open')));
+
+// PARALLAX
+const hBg=document.getElementById('heroBg');
+window.addEventListener('scroll',()=>{if(scrollY<innerHeight)hBg.style.transform=`translateY(${scrollY*.5}px)`});
+
+// REVEAL
+const ro=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');ro.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+// COUNTER
+function countUp(el){const t=+el.dataset.target,s=el.dataset.suffix||'',st=performance.now();(function u(n){const p=Math.min((n-st)/2000,1),v=Math.floor((1-Math.pow(1-p,3))*t);el.textContent=v+s;if(p<1)requestAnimationFrame(u);else el.textContent=t+s})(st)}
+const so=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){countUp(e.target);so.unobserve(e.target)}})},{threshold:.5});
+document.querySelectorAll('.stat-number[data-target]').forEach(el=>so.observe(el));
+
+// QUIZ DATA
+const quizData={
+  muscle:{tag:'MUSCLE & RECOVERY',name:'MATCHA ALMOND BAR',desc:'15g of clean fermented-yeast protein wrapped in a decadent matcha almond coating. Built for muscle synthesis without the heavy stomach feeling.',ing:'Fermented Yeast Protein · Almond Butter · Ceremonial Grade Matcha',img:'images/matcha_bar.png',badge:'BEST FOR MUSCLE'},
+  energy:{tag:'ENERGY & FOCUS',name:'MATCHA VITALITY DRINK',desc:'Ready-to-drink sparkling matcha with L-Theanine and Lion\'s Mane. Clean, sustained energy without the caffeine crash.',ing:'Ceremonial Matcha · L-Theanine · Lion\'s Mane Mushroom',img:'images/matcha_drink.png',badge:'BEST FOR ENERGY'},
+  skin:{tag:'SKIN & RECOVERY',name:'BERRY ANTIOXIDANT DRINK',desc:'Sparkling mixed berry elixir loaded with Vitamin C, Acerola cherry, and marine collagen peptides for that inside-out glow.',ing:'Marine Collagen · Vitamin C · Acerola · Antioxidant Blend',img:'images/berry_drink.png',badge:'BEST FOR SKIN'},
+  digestion:{tag:'GUT HEALTH',name:'CITRUS DEFENCE DRINK',desc:'Crisp yuzu and lemon sparkling water infused with prebiotic fibre and daily electrolytes to keep your gut happy and hydrated.',ing:'Prebiotic Fibre · Yuzu Extract · Electrolyte Blend · Zinc',img:'images/citrus_drink.png',badge:'BEST FOR DIGESTION'},
+  stress:{tag:'CALM & BALANCE',name:'MATCHA VITALITY DRINK',desc:'While it gives you energy, the L-Theanine in our premium Matcha provides a smooth, jitter-free calm focus that reduces stress.',ing:'Ceremonial Matcha · L-Theanine · Lion\'s Mane Mushroom',img:'images/matcha_drink.png',badge:'BEST FOR BALANCE'},
+  sleep:{tag:'RECOVERY',name:'DARK CHOC BERRY BAR',desc:'A satisfying evening snack with magnesium-rich dark chocolate and fermented-yeast. The perfect healthy indulgence to cap off your day before rest.',ing:'Dark Chocolate · Yeast Protein · Dried Berries · Raw Cacao',img:'images/berry_bar.png',badge:'BEST FOR RECOVERY'},
+  chips:{tag:'HIGH PROTEIN SNACK',name:'SEA SALT & VINEGAR CHIPS',desc:'20g of precision-fermented yeast protein. Crispy, tangible proof that high-protein doesn\'t have to mean heavy and bloating.',ing:'Fermented Yeast Protein · Potatoes · Sea Salt · Apple Cider Vinegar',img:'images/chips.png',badge:'BEST FOR SNACKING'}
+};
+
+const questions = [
+  { text: "What is your goal?", options: ["Build muscle", "Improve digestion", "Daily wellness"] },
+  { text: "How often do you work out?", options: ["Daily", "Few times a week", "Rarely"] },
+  { text: "Do protein drinks cause bloating?", options: ["Yes", "Sometimes", "No"] },
+  { text: "When do you take protein?", options: ["Morning", "Post workout", "Anytime"] },
+  { text: "What matters most?", options: ["Taste", "Digestion", "High protein"] }
+];
+
+let currentStep = 0;
+let userAnswers = {};
+
+function initQuiz() {
+  currentStep = 0;
+  userAnswers = {};
+  document.getElementById('quizStep2').classList.remove('active');
+  document.getElementById('quizStep1').classList.add('active');
+  renderQuizStep();
+}
+
+function renderQuizStep() {
+  const container = document.getElementById('quizStep1');
+  if(currentStep >= questions.length) {
+    calculateAndShowResult();
+    return;
+  }
+  const q = questions[currentStep];
+  const progressFill = ((currentStep) / questions.length) * 100 + 10;
+  
+  let html = `<div class="quiz-step-q animate-in">
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width: ${progressFill}%"></div></div>
+    <span class="quiz-progress-text">Question ${currentStep + 1} of ${questions.length}</span>
+    <h3>${q.text}</h3>
+    <div class="quiz-options">
+      ${q.options.map((opt, i) => `<button class="quiz-opt-btn" onclick="answerQuestion(${currentStep}, '${opt}')">${opt}</button>`).join('')}
+    </div>
+  </div>`;
+  container.innerHTML = html;
+}
+
+function answerQuestion(stepIndex, answer) {
+  userAnswers[stepIndex] = answer;
+  currentStep++;
+  renderQuizStep();
+}
+
+function calculateAndShowResult(){
+  let rec = 'muscle';
+  const goal = userAnswers[0];
+  const bloating = userAnswers[2];
+  const matters = userAnswers[4];
+
+  if(goal === 'Improve digestion' || matters === 'Digestion') {
+    rec = 'digestion';
+  } else if (bloating !== 'No' && (matters === 'Taste' || matters === 'High protein')) {
+    rec = 'chips';
+  } else if (goal === 'Build muscle') {
+      rec = matters === 'Taste' ? 'chips' : 'muscle';
+  } else {
+      rec = matters === 'Taste' ? 'sleep' : 'energy';
+  }
+
+  showResult(rec);
+}
+
+function showResult(goal){
+  const d=quizData[goal];
+  document.getElementById('quizResult').innerHTML=`<div class="result-card"><div class="result-card-inner"><div class="result-img"><img src="${d.img}" alt="${d.name}"><div class="result-badge">${d.badge}</div></div><div class="result-body"><span class="product-tag">${d.tag}</span><h3>${d.name}</h3><p>${d.desc}</p><p class="ingredients">${d.ing}</p><div class="result-actions"><a href="#products" class="btn-lime btn-sm">Add to Ritual →</a><a href="#products" class="btn-ghost btn-sm">See All Products</a></div></div></div></div>`;
+  document.getElementById('quizStep1').classList.remove('active');
+  document.getElementById('quizStep2').classList.add('active');
+}
+
+function resetQuiz(){
+  initQuiz();
+}
+
+// Call init on load
+window.addEventListener('DOMContentLoaded', () => {
+    initQuiz();
+});
+</script>
+</body>
+</html>
