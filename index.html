@@ -5,15 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LIVVUP — Live Above the Ordinary | Health. Reimagined.</title>
 <meta name="description" content="LivvUp by Unilever — premium health supplements. Find your perfect supplement with our interactive quiz.">
-<link rel="icon" type="image/svg+xml" href="images/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0A0A0A;--lime:#C8F064;--accent:#a371f7;--card:#141414;--muted:#888;--white:#fff;--font-head:'Space Grotesk',sans-serif;--font-body:'Inter',sans-serif}
+:root{--bg:#0A0A0A;--lime:#C8F064;--card:#141414;--muted:#888;--white:#fff;--font-head:'Space Grotesk',sans-serif;--font-body:'Inter',sans-serif}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{background:var(--bg);background-image:radial-gradient(circle at 15% 50%, rgba(200, 240, 100, 0.06) 0%, transparent 40%),radial-gradient(circle at 85% 30%, rgba(163, 113, 247, 0.08) 0%, transparent 40%);background-attachment:fixed;color:var(--white);font-family:var(--font-body);overflow-x:hidden;cursor:none}
+body{background:var(--bg);color:var(--white);font-family:var(--font-body);overflow-x:hidden;cursor:none}
 a{color:inherit;text-decoration:none}
 /* CURSOR */
 .cursor{width:20px;height:20px;background:var(--lime);border-radius:50%;position:fixed;pointer-events:none;z-index:99999;mix-blend-mode:difference;transition:transform .15s}
@@ -53,19 +52,14 @@ nav.scrolled{background:rgba(10,10,10,.95);backdrop-filter:blur(20px)}
 .btn-lime:hover{background:#deff8e;transform:translateY(-2px)}
 .btn-ghost{display:inline-flex;align-items:center;gap:.5rem;padding:1rem 2.2rem;background:transparent;color:#fff;font-family:var(--font-head);font-weight:500;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(255,255,255,.25);cursor:none;transition:.3s}
 .btn-ghost:hover{border-color:var(--lime);background:rgba(200,240,100,.05)}
-/* Global Floaters */
-.global-floaters{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.g-float{position:absolute;will-change:transform;opacity:0.2;transition:opacity 0.3s;filter:drop-shadow(0 15px 30px rgba(0,0,0,0.5))}
-.g-pill{width:60px;height:24px;border-radius:12px;background:var(--lime)}
-.g-pill.accent{background:var(--accent)}
-.g-pill.white{background:var(--white)}
-.g-pill.ghost{background:transparent;border:1.5px solid var(--lime)}
-.g-pill.ghost-white{background:transparent;border:1.5px solid rgba(255,255,255,.3)}
-.g-dot{width:8px;height:8px;border-radius:50%;background:var(--lime)}
-.g-dot.accent{background:var(--accent)}
-.g-orb{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,var(--lime),transparent 70%);opacity:.03;filter:blur(20px)}
-.g-orb.accent{background:radial-gradient(circle,var(--accent),transparent 70%)}
-.hero-content{position:relative;z-index:2;padding:0 3rem;max-width:1400px;margin:0 auto;width:100%}
+/* Floating pills */
+.hero-pills{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.pill{position:absolute;width:60px;height:24px;border-radius:12px;opacity:.15;animation:floatPill linear infinite}
+.pill:nth-child(1){background:var(--lime);top:20%;right:15%;animation-duration:8s;width:50px;height:20px}
+.pill:nth-child(2){background:#fff;top:60%;right:25%;animation-duration:12s;animation-delay:-3s;width:40px;height:16px}
+.pill:nth-child(3){background:var(--lime);top:40%;right:8%;animation-duration:10s;animation-delay:-5s}
+.pill:nth-child(4){background:#fff;top:75%;right:35%;animation-duration:9s;animation-delay:-2s;width:35px;height:14px}
+@keyframes floatPill{0%{transform:translateY(0) rotate(0deg)}25%{transform:translateY(-30px) rotate(15deg)}50%{transform:translateY(10px) rotate(-10deg)}75%{transform:translateY(-20px) rotate(5deg)}100%{transform:translateY(0) rotate(0deg)}}
 .rotating-text{position:absolute;bottom:3rem;left:3rem;width:120px;height:120px;z-index:2}
 .rotating-text svg{width:100%;height:100%;animation:rot 12s linear infinite}
 .rotating-text svg text{font-family:var(--font-head);font-size:11px;letter-spacing:3px;text-transform:uppercase;fill:var(--lime)}
@@ -231,37 +225,35 @@ body{cursor:auto}
 .btn-lime,.btn-ghost,.goal-card,.product-row,.try-again,a,button{cursor:pointer}
 }
 @media(max-width:480px){.hero-line{font-size:clamp(2.8rem,12vw,4rem)}.stats-row{flex-direction:column}.goal-grid{grid-template-columns:1fr}}
+/* CART */
+.cart-btn{background:var(--lime);border:none;color:var(--bg);font-family:var(--font-head);font-size:.85rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:transform .3s;display:flex;align-items:center;gap:0.3rem;padding: 0.6rem 1.2rem;border-radius:30px;}
+.cart-btn:hover{transform:translateY(-2px);}
+.cart-overlay{position:fixed;inset:0;background:rgba(10,10,10,0.85);backdrop-filter:blur(8px);z-index:2000;display:none;align-items:flex-start;justify-content:flex-end;}
+.cart-overlay.open{display:flex;}
+.cart-modal{background:var(--card);width:100%;max-width:400px;height:100vh;padding:2.5rem 2rem;border-left:1px solid rgba(200,240,100,0.15);display:flex;flex-direction:column;animation:slideInRight 0.4s cubic-bezier(0.16,1,0.3,1);}
+@keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+.cart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2.5rem;}
+.cart-header h3{font-family:var(--font-head);font-size:1.5rem;font-weight:700;}
+.cart-header button{background:none;border:none;color:var(--muted);font-size:2rem;cursor:pointer;line-height:1;transition:color 0.3s;}
+.cart-header button:hover{color:var(--white);}
+.cart-items{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:1.5rem;}
+.cart-item{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:1.5rem;}
+.cart-item-info{display:flex;flex-direction:column;gap:0.4rem;}
+.cart-item-title{font-family:var(--font-head);font-weight:600;font-size:1rem;letter-spacing:0.02em;}
+.cart-item-price{color:var(--lime);font-size:0.95rem;font-weight:600;}
+.cart-item-remove{background:none;border:none;color:var(--muted);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;text-align:left;transition:color 0.3s;}
+.cart-item-remove:hover{color:#ff5555;}
+.cart-footer{padding-top:2rem;border-top:1px solid rgba(255,255,255,0.1);margin-top:auto;}
+.cart-total{font-family:var(--font-head);font-size:1.2rem;font-weight:700;display:flex;justify-content:space-between;margin-bottom:1.5rem;text-transform:uppercase;letter-spacing:0.05em;}
+.product-meta{display:flex;align-items:center;gap:1.5rem;margin-bottom:1.5rem;}
+.product-price{font-family:var(--font-head);font-size:1.4rem;font-weight:700;color:var(--lime);}
+.product-stats{display:flex;gap:0.8rem;font-size:0.85rem;color:var(--white);font-weight:500;text-transform:uppercase;letter-spacing:0.05em;}
+.product-stats span{background:rgba(255,255,255,0.08);padding:0.3rem 0.8rem;border-radius:20px;border:1px solid rgba(255,255,255,0.1);}
 </style>
 </head>
 <body>
 <div class="loader" id="loader"><span>LIVV↑UP</span></div>
 <div class="cursor" id="cur"></div>
-
-<div class="global-floaters" id="gFloaters">
-  <!-- Orbs for ambient lighting interaction -->
-  <div class="g-float g-orb" data-speed="0.5" style="top: 20%; left: 10%;"></div>
-  <div class="g-float g-orb accent" data-speed="-0.3" style="top: 60%; right: 15%;"></div>
-  
-  <!-- Solid Pills -->
-  <div class="g-float g-pill" data-speed="1.2" style="top: 15%; left: 8%;"></div>
-  <div class="g-float g-pill accent" data-speed="-0.8" style="top: 45%; right: 12%; width:44px; height:18px"></div>
-  <div class="g-float g-pill white" data-speed="1.6" style="top: 75%; left: 18%; width:35px; height:14px"></div>
-  <div class="g-float g-pill" data-speed="-1.2" style="top: 85%; right: 25%; width:50px; height:20px"></div>
-  <div class="g-float g-pill accent" data-speed="2.2" style="top: 8%; left: 45%; width:30px; height:12px"></div>
-
-  <!-- Ghost outline pills -->
-  <div class="g-float g-pill ghost" data-speed="-1.5" style="top: 12%; right: 25%; width:48px; height:20px"></div>
-  <div class="g-float g-pill ghost-white" data-speed="1.1" style="top: 55%; left: 22%; width:55px; height:22px"></div>
-  <div class="g-float g-pill ghost" data-speed="-1.8" style="top: 35%; right: 35%; width:40px; height:16px"></div>
-  <div class="g-float g-pill ghost-white" data-speed="1.4" style="top: 90%; left: 40%; width:30px; height:12px"></div>
-
-  <!-- Scattered dots -->
-  <div class="g-float g-dot" data-speed="1.5" style="top: 25%; left: 25%;"></div>
-  <div class="g-float g-dot accent" data-speed="-1.2" style="top: 65%; left: 8%;"></div>
-  <div class="g-float g-dot" data-speed="2.5" style="top: 80%; right: 15%;"></div>
-  <div class="g-float g-dot accent" data-speed="-2.0" style="top: 18%; right: 45%;"></div>
-  <div class="g-float g-dot" data-speed="1.3" style="top: 50%; right: 20%;"></div>
-</div>
 
 <nav id="nav">
   <a href="#" class="nav-logo">LIVV<span class="arr">↑</span>UP</a>
@@ -271,12 +263,32 @@ body{cursor:auto}
     <li><a href="#about">About</a></li>
     <li><a href="#community">Community</a></li>
   </ul>
-  <button class="menu-btn" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+  <div style="display:flex; align-items:center; gap: 1.5rem; z-index:1001;">
+    <button class="cart-btn" id="navCartBtn" aria-label="Cart">CART (<span id="cartCount">0</span>)</button>
+    <button class="menu-btn" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
 </nav>
+
+<div class="cart-overlay" id="cartOverlay">
+  <div class="cart-modal">
+    <div class="cart-header">
+      <h3>Your Cart</h3>
+      <button id="closeCartBtn">&times;</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+      <div class="cart-total"><span>Total</span> <span>£<span id="cartTotal">0.00</span></span></div>
+      <button class="btn-lime" id="checkoutBtn" style="width:100%; justify-content:center;">Push to Email</button>
+    </div>
+  </div>
+</div>
 
 <section class="hero" id="hero">
   <div class="hero-bg" id="heroBg"></div>
   <div class="hero-overlay"></div>
+  <div class="hero-pills">
+    <div class="pill"></div><div class="pill"></div><div class="pill"></div><div class="pill"></div>
+  </div>
   <div class="hero-content">
     <div class="hero-line" id="hl1"><span class="lime">LIVE</span></div>
     <div class="hero-line" id="hl2">ABOVE THE</div>
@@ -334,8 +346,12 @@ body{cursor:auto}
         <div class="product-row-body">
           <span class="product-tag">ENERGY + FOCUS</span>
           <h3>MATCHA VITALITY</h3>
+          <div class="product-meta">
+            <span class="product-price">£3.50</span>
+            <div class="product-stats"><span>5g Protein</span><span>250ml</span></div>
+          </div>
           <p>Ready-to-drink sparkling matcha with L-Theanine and Lion's Mane. Clean, sustained energy without the caffeine crash. Your 3pm slump solution.</p>
-          <a href="#" class="add-link">→ Add to Ritual</a>
+          <button class="btn-ghost" onclick="addToCart('p1', 'Matcha Vitality Drink', 3.50)">Add to Cart</button>
         </div>
       </div>
       <div class="product-row reveal">
@@ -343,8 +359,12 @@ body{cursor:auto}
         <div class="product-row-body">
           <span class="product-tag">RECOVERY + GLOW</span>
           <h3>BERRY ANTIOXIDANT</h3>
+          <div class="product-meta">
+            <span class="product-price">£3.50</span>
+            <div class="product-stats"><span>5g Protein</span><span>250ml</span></div>
+          </div>
           <p>Sparkling mixed berry elixir loaded with Vitamin C, Acerola cherry, and marine collagen peptides. Recovery that tastes like dessert.</p>
-          <a href="#" class="add-link">→ Add to Ritual</a>
+          <button class="btn-ghost" onclick="addToCart('p2', 'Berry Antioxidant Drink', 3.50)">Add to Cart</button>
         </div>
       </div>
       <div class="product-row reveal">
@@ -352,8 +372,12 @@ body{cursor:auto}
         <div class="product-row-body">
           <span class="product-tag">IMMUNITY + HYDRATION</span>
           <h3>CITRUS DEFENCE</h3>
+          <div class="product-meta">
+            <span class="product-price">£2.50</span>
+            <div class="product-stats"><span>0g Protein</span><span>250ml</span></div>
+          </div>
           <p>Crisp yuzu and lemon sparkling water infused with Zinc, Echinacea, and daily electrolytes. Hydration that works harder.</p>
-          <a href="#" class="add-link">→ Add to Ritual</a>
+          <button class="btn-ghost" onclick="addToCart('p3', 'Citrus Defence Drink', 2.50)">Add to Cart</button>
         </div>
       </div>
       <div class="product-row reveal">
@@ -361,8 +385,12 @@ body{cursor:auto}
         <div class="product-row-body">
           <span class="product-tag">PLANT PROTEIN</span>
           <h3>MATCHA ALMOND BAR</h3>
+          <div class="product-meta">
+            <span class="product-price">£2.80</span>
+            <div class="product-stats"><span>15g Protein</span><span>50g</span></div>
+          </div>
           <p>15g of clean plant protein wrapped in a decadent matcha almond coating. No chalky texture. No artificial sweeteners. Just real fuel.</p>
-          <a href="#" class="add-link">→ Add to Ritual</a>
+          <button class="btn-ghost" onclick="addToCart('p4', 'Matcha Almond Bar', 2.80)">Add to Cart</button>
         </div>
       </div>
       <div class="product-row reveal">
@@ -370,8 +398,12 @@ body{cursor:auto}
         <div class="product-row-body">
           <span class="product-tag">PLANT PROTEIN</span>
           <h3>DARK CHOC BERRY BAR</h3>
+          <div class="product-meta">
+            <span class="product-price">£2.80</span>
+            <div class="product-stats"><span>15g Protein</span><span>50g</span></div>
+          </div>
           <p>Rich dark chocolate and tart dried berries over a soft fermented-yeast protein core. The indulgence you want with the macros you need.</p>
-          <a href="#" class="add-link">→ Add to Ritual</a>
+          <button class="btn-ghost" onclick="addToCart('p5', 'Dark Choc Berry Bar', 2.80)">Add to Cart</button>
         </div>
       </div>
       <div class="product-row reveal">
@@ -379,8 +411,12 @@ body{cursor:auto}
         <div class="product-row-body">
           <span class="product-tag">HIGH PROTEIN SNACK</span>
           <h3>PROTEIN CHIPS</h3>
+          <div class="product-meta">
+            <span class="product-price">£2.00</span>
+            <div class="product-stats"><span>20g Protein</span><span>40g</span></div>
+          </div>
           <p>20g of precision-fermented yeast protein in every bag. Crispy, tangy, and dangerously good. Say goodbye to heavy, bloating whey snacks.</p>
-          <a href="#" class="add-link">→ Add to Ritual</a>
+          <button class="btn-ghost" onclick="addToCart('p6', 'Protein Chips', 2.00)">Add to Cart</button>
         </div>
       </div>
     </div>
@@ -469,48 +505,10 @@ body{cursor:auto}
 // LOADER
 window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('loader').classList.add('done');['hl1','hl2','hl3','hsub','hcta'].forEach(id=>document.getElementById(id).classList.add('vis'))},600)});
 
-// CURSOR AND PARALLAX
+// CURSOR
 const cur=document.getElementById('cur');let mx=0,my=0,cx=0,cy=0;
-const floaters=document.querySelectorAll('.g-float');
-let time=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
-(function ac(){
-  cx+=(mx-cx)*.15;cy+=(my-cy)*.15;
-  cur.style.transform=`translate(${cx-10}px,${cy-10}px)`;
-  
-  time+=0.01;
-  const cX=(mx/window.innerWidth-0.5)*2;
-  const cY=(my/window.innerHeight-0.5)*2;
-
-  floaters.forEach((f, i) => {
-    const sp=parseFloat(f.getAttribute('data-speed'));
-    const floatY=Math.sin(time+i)*15;
-    const rot=Math.cos(time+i)*5;
-    const pX=-cX*15*sp;
-    const pY=-cY*15*sp;
-    
-    // Slight repulsion
-    const rect = f.getBoundingClientRect();
-    const fX = rect.left + rect.width/2;
-    const fY = rect.top + rect.height/2;
-    const dist = Math.sqrt(Math.pow(mx-fX, 2) + Math.pow(my-fY, 2));
-    
-    let repX=0, repY=0;
-    if(dist < 200) {
-      const force = (200 - dist) / 5;
-      const angle = Math.atan2(fY - my, fX - mx);
-      repX = Math.cos(angle) * force;
-      repY = Math.sin(angle) * force;
-      f.style.opacity = "0.5";
-    } else {
-      f.style.opacity = "0.2";
-    }
-
-    f.style.transform=`translate3d(${pX+repX}px, ${floatY+pY+repY}px, 0) rotate(${rot + (pX*0.5)}deg)`;
-  });
-
-  requestAnimationFrame(ac);
-})();
+(function ac(){cx+=(mx-cx)*.15;cy+=(my-cy)*.15;cur.style.transform=`translate(${cx-10}px,${cy-10}px)`;requestAnimationFrame(ac)})();
 document.querySelectorAll('a,button,.goal-card,.product-row').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('hover'));el.addEventListener('mouseleave',()=>cur.classList.remove('hover'))});
 
 // NAV
@@ -618,9 +616,66 @@ function resetQuiz(){
   initQuiz();
 }
 
-// Call init on load
+// CART LOGIC
+let cart = [];
+
+function addToCart(id, name, price) {
+  const existing = cart.find(i => i.id === id);
+  if(existing) {
+    existing.qty++;
+  } else {
+    cart.push({ id, name, price, qty: 1 });
+  }
+  updateCartUI();
+  document.getElementById('cartOverlay').classList.add('open');
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(i => i.id !== id);
+  updateCartUI();
+}
+
+function updateCartUI() {
+  document.getElementById('cartCount').textContent = cart.reduce((sum, i) => sum + i.qty, 0);
+  const container = document.getElementById('cartItems');
+  container.innerHTML = '';
+  let total = 0;
+  cart.forEach(item => {
+    total += item.price * item.qty;
+    container.innerHTML += `
+      <div class="cart-item">
+        <div class="cart-item-info">
+          <span class="cart-item-title">${item.qty}x ${item.name}</span>
+          <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">Remove</button>
+        </div>
+        <span class="cart-item-price">£${(item.price * item.qty).toFixed(2)}</span>
+      </div>
+    `;
+  });
+  document.getElementById('cartTotal').textContent = total.toFixed(2);
+}
+
+// INIT
 window.addEventListener('DOMContentLoaded', () => {
     initQuiz();
+    
+    document.getElementById('navCartBtn').addEventListener('click', () => {
+      document.getElementById('cartOverlay').classList.add('open');
+    });
+    
+    document.getElementById('closeCartBtn').addEventListener('click', () => {
+      document.getElementById('cartOverlay').classList.remove('open');
+    });
+    
+    document.getElementById('checkoutBtn').addEventListener('click', () => {
+      if (cart.length === 0) return alert('Your cart is empty!');
+      let body = 'Hello LivvUp,\n\nI would like to order the following items:\n\n';
+      cart.forEach(item => {
+        body += `- ${item.qty}x ${item.name} (£${(item.price * item.qty).toFixed(2)})\n`;
+      });
+      body += `\nTotal: £${document.getElementById('cartTotal').textContent}\n\nThanks!`;
+      window.location.href = `mailto:orders@livvup.com?subject=New Order&body=${encodeURIComponent(body)}`;
+    });
 });
 </script>
 </body>
