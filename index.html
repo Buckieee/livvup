@@ -277,8 +277,8 @@ body{cursor:auto}
     </div>
     <div class="cart-items" id="cartItems"></div>
     <div class="cart-footer">
-      <div class="cart-total"><span>Total</span> <span>£<span id="cartTotal">0.00</span></span></div>
-      <button class="btn-lime" id="checkoutBtn" style="width:100%; justify-content:center;">Push to Email</button>
+      <div class="cart-total"><span>Total</span> <span>₹<span id="cartTotal">0</span></span></div>
+      <button class="btn-lime" id="checkoutBtn" style="width:100%; justify-content:center;">Checkout</button>
     </div>
   </div>
 </div>
@@ -347,11 +347,11 @@ body{cursor:auto}
           <span class="product-tag">ENERGY + FOCUS</span>
           <h3>MATCHA VITALITY</h3>
           <div class="product-meta">
-            <span class="product-price">£3.50</span>
+            <span class="product-price">₹350</span>
             <div class="product-stats"><span>5g Protein</span><span>250ml</span></div>
           </div>
           <p>Ready-to-drink sparkling matcha with L-Theanine and Lion's Mane. Clean, sustained energy without the caffeine crash. Your 3pm slump solution.</p>
-          <button class="btn-ghost" onclick="addToCart('p1', 'Matcha Vitality Drink', 3.50)">Add to Cart</button>
+          <button class="btn-ghost" onclick="addToCart('p1', 'Matcha Vitality Drink', 350)">Add to Cart</button>
         </div>
       </div>
       <div class="product-row reveal">
@@ -360,11 +360,11 @@ body{cursor:auto}
           <span class="product-tag">RECOVERY + GLOW</span>
           <h3>BERRY ANTIOXIDANT</h3>
           <div class="product-meta">
-            <span class="product-price">£3.50</span>
+            <span class="product-price">₹350</span>
             <div class="product-stats"><span>5g Protein</span><span>250ml</span></div>
           </div>
           <p>Sparkling mixed berry elixir loaded with Vitamin C, Acerola cherry, and marine collagen peptides. Recovery that tastes like dessert.</p>
-          <button class="btn-ghost" onclick="addToCart('p2', 'Berry Antioxidant Drink', 3.50)">Add to Cart</button>
+          <button class="btn-ghost" onclick="addToCart('p2', 'Berry Antioxidant Drink', 350)">Add to Cart</button>
         </div>
       </div>
       <div class="product-row reveal">
@@ -373,11 +373,11 @@ body{cursor:auto}
           <span class="product-tag">IMMUNITY + HYDRATION</span>
           <h3>CITRUS DEFENCE</h3>
           <div class="product-meta">
-            <span class="product-price">£2.50</span>
+            <span class="product-price">₹250</span>
             <div class="product-stats"><span>0g Protein</span><span>250ml</span></div>
           </div>
           <p>Crisp yuzu and lemon sparkling water infused with Zinc, Echinacea, and daily electrolytes. Hydration that works harder.</p>
-          <button class="btn-ghost" onclick="addToCart('p3', 'Citrus Defence Drink', 2.50)">Add to Cart</button>
+          <button class="btn-ghost" onclick="addToCart('p3', 'Citrus Defence Drink', 250)">Add to Cart</button>
         </div>
       </div>
       <div class="product-row reveal">
@@ -386,11 +386,11 @@ body{cursor:auto}
           <span class="product-tag">PLANT PROTEIN</span>
           <h3>MATCHA ALMOND BAR</h3>
           <div class="product-meta">
-            <span class="product-price">£2.80</span>
+            <span class="product-price">₹280</span>
             <div class="product-stats"><span>15g Protein</span><span>50g</span></div>
           </div>
           <p>15g of clean plant protein wrapped in a decadent matcha almond coating. No chalky texture. No artificial sweeteners. Just real fuel.</p>
-          <button class="btn-ghost" onclick="addToCart('p4', 'Matcha Almond Bar', 2.80)">Add to Cart</button>
+          <button class="btn-ghost" onclick="addToCart('p4', 'Matcha Almond Bar', 280)">Add to Cart</button>
         </div>
       </div>
       <div class="product-row reveal">
@@ -399,11 +399,11 @@ body{cursor:auto}
           <span class="product-tag">PLANT PROTEIN</span>
           <h3>DARK CHOC BERRY BAR</h3>
           <div class="product-meta">
-            <span class="product-price">£2.80</span>
+            <span class="product-price">₹280</span>
             <div class="product-stats"><span>15g Protein</span><span>50g</span></div>
           </div>
           <p>Rich dark chocolate and tart dried berries over a soft fermented-yeast protein core. The indulgence you want with the macros you need.</p>
-          <button class="btn-ghost" onclick="addToCart('p5', 'Dark Choc Berry Bar', 2.80)">Add to Cart</button>
+          <button class="btn-ghost" onclick="addToCart('p5', 'Dark Choc Berry Bar', 280)">Add to Cart</button>
         </div>
       </div>
       <div class="product-row reveal">
@@ -412,11 +412,11 @@ body{cursor:auto}
           <span class="product-tag">HIGH PROTEIN SNACK</span>
           <h3>PROTEIN CHIPS</h3>
           <div class="product-meta">
-            <span class="product-price">£2.00</span>
+            <span class="product-price">₹200</span>
             <div class="product-stats"><span>20g Protein</span><span>40g</span></div>
           </div>
           <p>20g of precision-fermented yeast protein in every bag. Crispy, tangy, and dangerously good. Say goodbye to heavy, bloating whey snacks.</p>
-          <button class="btn-ghost" onclick="addToCart('p6', 'Protein Chips', 2.00)">Add to Cart</button>
+          <button class="btn-ghost" onclick="addToCart('p6', 'Protein Chips', 200)">Add to Cart</button>
         </div>
       </div>
     </div>
@@ -648,11 +648,11 @@ function updateCartUI() {
           <span class="cart-item-title">${item.qty}x ${item.name}</span>
           <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">Remove</button>
         </div>
-        <span class="cart-item-price">£${(item.price * item.qty).toFixed(2)}</span>
+        <span class="cart-item-price">₹${Math.round(item.price * item.qty)}</span>
       </div>
     `;
   });
-  document.getElementById('cartTotal').textContent = total.toFixed(2);
+  document.getElementById('cartTotal').textContent = Math.round(total);
 }
 
 // INIT
@@ -669,12 +669,7 @@ window.addEventListener('DOMContentLoaded', () => {
     
     document.getElementById('checkoutBtn').addEventListener('click', () => {
       if (cart.length === 0) return alert('Your cart is empty!');
-      let body = 'Hello LivvUp,\n\nI would like to order the following items:\n\n';
-      cart.forEach(item => {
-        body += `- ${item.qty}x ${item.name} (£${(item.price * item.qty).toFixed(2)})\n`;
-      });
-      body += `\nTotal: £${document.getElementById('cartTotal').textContent}\n\nThanks!`;
-      window.location.href = `mailto:orders@livvup.com?subject=New Order&body=${encodeURIComponent(body)}`;
+      alert('Checkout functionality is coming soon!');
     });
 });
 </script>
